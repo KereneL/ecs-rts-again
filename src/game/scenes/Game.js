@@ -53,16 +53,20 @@ export class Game extends Scene {
     }
     seedWorldWithUnits(unitAmount) {
         for (let i = 0; i < unitAmount; i++) {
-            this.unitColor = Phaser.Display.Color.HSLToColor(0.11, 1, Phaser.Math.Linear(0.25, 0.55, i / unitAmount))
+            this.unitColor = Phaser.Display.Color.HSLToColor(225 / 360, 35.9 / 100, Phaser.Math.Linear(0.45, 0.65, i / unitAmount))
             this.createUnit()
         }
     }
     createUnit() {
-        this.createTank()
+        if (Math.random() > 0.5) {
+            this.createQuad()
+        } else {
+            this.createTank()
+        }
     }
     createTank() {
         const world = this.world
-        const { Transform, BodyOrientation, Mobile, RendersSprite, SpawningNow, Selectable, Interactable, IsSelected } = this.world.components
+        const { Transform, BodyOrientation, Mobile, RendersSprite, SpawningNow, Selectable, Interactable } = this.world.components
         const unit = bitEcs.addEntity(world);
 
         bitEcs.addComponent(world, unit, Transform);
@@ -79,6 +83,38 @@ export class Game extends Scene {
 
         bitEcs.addComponent(world, unit, RendersSprite);
         RendersSprite.spriteKey[unit] = 'tank'
+        RendersSprite.tint[unit] = this.unitColor.color
+        RendersSprite.depth[unit] = 1;
+        RendersSprite.scale[unit] = 2;
+
+        bitEcs.addComponent(world, unit, Selectable);
+        Selectable.selectionMarkerSize[unit] = 24
+
+        bitEcs.addComponent(world, unit, Interactable)
+        Interactable.hitAreaType[unit] = 'circle';
+        Interactable.hitAreaRadius[unit] = 22;
+
+        bitEcs.addComponent(world, unit, SpawningNow);
+    }
+        createQuad() {
+        const world = this.world
+        const { Transform, BodyOrientation, Mobile, RendersSprite, SpawningNow, Selectable, Interactable } = this.world.components
+        const unit = bitEcs.addEntity(world);
+
+        bitEcs.addComponent(world, unit, Transform);
+        Transform.centerPosition[unit] = this.getRandomPointOnMap()
+
+        bitEcs.addComponent(world, unit, BodyOrientation);
+        const angle = Phaser.Math.Angle.Random()
+        BodyOrientation.angle[unit] = angle
+
+        bitEcs.addComponent(world, unit, Mobile);
+        Mobile.turnSpeed[unit] = 1.2;
+        Mobile.speed[unit] = 90;
+        Mobile.turnsInPlace[unit] = false;
+
+        bitEcs.addComponent(world, unit, RendersSprite);
+        RendersSprite.spriteKey[unit] = 'quad'
         RendersSprite.tint[unit] = this.unitColor.color
         RendersSprite.depth[unit] = 1;
         RendersSprite.scale[unit] = 2;

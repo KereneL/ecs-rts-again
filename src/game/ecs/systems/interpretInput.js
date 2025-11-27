@@ -102,7 +102,8 @@ function intersectPoint(world, eid, pointX, pointY) {
         rectVar.setTo(x, y, width, height);
         hitBoxGeom = rectVar;
     };
-    return (hitBoxGeom && hitBoxGeom.contains(pointX, pointY))
+    const doesContain = (hitBoxGeom && hitBoxGeom.contains(pointX, pointY))
+    return doesContain
 }
 function deselectAll(world) {
     const { Selectable, IsSelected } = world.components
