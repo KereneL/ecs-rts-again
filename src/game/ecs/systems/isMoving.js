@@ -5,7 +5,7 @@ export const isMovingSystem = {
   // init: function (world) {},
   update: function (world) {
     const { Transform, BodyOrientation, Mobile, IsMoving } = world.components
-    const deltaTimeInSeconds = world.time.delta / 1000;
+    const deltaTimeInSeconds = world.time.deltaInSeconds;
 
     for (const eid of bitEcs.query(world, [Transform, BodyOrientation, Mobile, IsMoving])) {
       if (IsMoving.isRotating[eid]) {

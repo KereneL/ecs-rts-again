@@ -3,6 +3,7 @@ export const timeSystem = {
   update: (world, deltaTime) => {
     const { time } = world
     time.delta = deltaTime
+    time.deltaInSeconds = deltaTime / 1000
     time.elapsed += deltaTime
     time.then = performance.now()
   }

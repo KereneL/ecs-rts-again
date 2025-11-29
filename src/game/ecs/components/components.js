@@ -28,6 +28,7 @@ export const RendersSprite = {
   tint: [],
   scale: [],
   depth: [],
+  framesFor360: [],
 
   gameObject: [],
 };

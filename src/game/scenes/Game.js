@@ -82,21 +82,22 @@ export class Game extends Scene {
         Mobile.turnsInPlace[unit] = true;
 
         bitEcs.addComponent(world, unit, RendersSprite);
-        RendersSprite.spriteKey[unit] = 'tank'
+        RendersSprite.spriteKey[unit] = 'tank2'
+        RendersSprite.framesFor360[unit] = 32;
         RendersSprite.tint[unit] = this.unitColor.color
         RendersSprite.depth[unit] = 1;
-        RendersSprite.scale[unit] = 2;
+        RendersSprite.scale[unit] = 1;
 
         bitEcs.addComponent(world, unit, Selectable);
-        Selectable.selectionMarkerSize[unit] = 24
+        Selectable.selectionMarkerSize[unit] = 50
 
         bitEcs.addComponent(world, unit, Interactable)
         Interactable.hitAreaType[unit] = 'circle';
-        Interactable.hitAreaRadius[unit] = 22;
+        Interactable.hitAreaRadius[unit] = 50;
 
         bitEcs.addComponent(world, unit, SpawningNow);
     }
-        createQuad() {
+    createQuad() {
         const world = this.world
         const { Transform, BodyOrientation, Mobile, RendersSprite, SpawningNow, Selectable, Interactable } = this.world.components
         const unit = bitEcs.addEntity(world);
@@ -109,22 +110,23 @@ export class Game extends Scene {
         BodyOrientation.angle[unit] = angle
 
         bitEcs.addComponent(world, unit, Mobile);
-        Mobile.turnSpeed[unit] = 1.2;
+        Mobile.turnSpeed[unit] = 1.25;
         Mobile.speed[unit] = 90;
         Mobile.turnsInPlace[unit] = false;
 
         bitEcs.addComponent(world, unit, RendersSprite);
-        RendersSprite.spriteKey[unit] = 'quad'
+        RendersSprite.spriteKey[unit] = 'quad3'
+        RendersSprite.framesFor360[unit] = 32;
         RendersSprite.tint[unit] = this.unitColor.color
         RendersSprite.depth[unit] = 1;
-        RendersSprite.scale[unit] = 2;
+        RendersSprite.scale[unit] = 1;
 
         bitEcs.addComponent(world, unit, Selectable);
-        Selectable.selectionMarkerSize[unit] = 22
+        Selectable.selectionMarkerSize[unit] = 26
 
         bitEcs.addComponent(world, unit, Interactable)
         Interactable.hitAreaType[unit] = 'circle';
-        Interactable.hitAreaRadius[unit] = 20;
+        Interactable.hitAreaRadius[unit] = 26;
 
         bitEcs.addComponent(world, unit, SpawningNow);
     }

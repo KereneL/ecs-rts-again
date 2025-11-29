@@ -24,29 +24,13 @@ export class Preloader extends Scene {
 
     preload() {
         this.load.setPath('assets');
-        [18, 20, 22, 24, 26].forEach(value => {
+        [18, 20, 22, 24, 26, 50].forEach(value => {
             this.load.image({
                 key: `selection-mark-${value}`,
                 url: `./selection${value}.png`,
             })
         })
 
-        this.load.image({
-            key: 'selection-mark-20',
-            url: './selection22.png',
-        })
-        this.load.image({
-            key: 'selection-mark-22',
-            url: './selection22.png',
-        })
-        this.load.image({
-            key: 'selection-mark-24',
-            url: './selection22.png',
-        })
-        this.load.image({
-            key: 'selection-mark-26',
-            url: './selection26.png',
-        })
         this.load.spritesheet({
             key: 'tank',
             url: './tank.png',
@@ -56,11 +40,43 @@ export class Preloader extends Scene {
             }
         })
         this.load.spritesheet({
+            key: 'tank2',
+            url: './tank2.png',
+            frameConfig: {
+                frameWidth: 50,
+                frameHeight: 41,
+            }
+        })
+        this.load.spritesheet({
+            key: 'tank3',
+            url: './tank3.png',
+            frameConfig: {
+                frameWidth: 48,
+                frameHeight: 48,
+            }
+        })
+        this.load.spritesheet({
             key: 'quad',
             url: './quad.png',
             frameConfig: {
                 frameWidth: 12,
                 frameHeight: 12,
+            }
+        })
+        this.load.spritesheet({
+            key: 'quad2',
+            url: './quad2.png',
+            frameConfig: {
+                frameWidth: 32,
+                frameHeight: 26,
+            }
+        })
+        this.load.spritesheet({
+            key: 'quad3',
+            url: './quad3.png',
+            frameConfig: {
+                frameWidth: 48,
+                frameHeight: 48,
             }
         })
         this.load.spritesheet({

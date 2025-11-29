@@ -33,6 +33,7 @@ export function createGameWorld(scene) {
     components,
     time: {
       delta: 0,
+      deltaInSeconds: 0,
       elapsed: 0,
       then: 0
     },

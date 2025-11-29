@@ -23,9 +23,10 @@ export const spawnActorSpriteSystem = {
             const scale = RendersSprite.scale[eid];
             const depth = RendersSprite.depth[eid];
             const angle = Phaser.Math.Angle.Normalize(BodyOrientation.angle[eid]);
-            const quantizedAngle = Math.round((angle / Phaser.Math.PI2) * 8)
+            const framesFor360 = RendersSprite.framesFor360[eid]
+            const quantizedAngle = Math.round((angle / Phaser.Math.PI2) * framesFor360)
             BodyOrientation.quantizedAngle[eid] = quantizedAngle;
-            const frame = quantizedAngle % 8
+            const frame = quantizedAngle % framesFor360
 
             const gO =
                 scene.actorsPool.getFirstDead(true)
