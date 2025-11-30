@@ -1,5 +1,4 @@
 import * as bitEcs from 'bitecs';
-import * as Phaser from 'phaser';
 
 export const isSelectedSystem = {
     init: function (world) {

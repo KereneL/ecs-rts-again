@@ -1,16 +1,16 @@
 import * as bitEcs from 'bitecs';
-import * as Phaser from 'phaser';
+import { engineCircleType, engineRectType } from '../utils';
 
 export const selectableSystem = {
   // init: function (world) {},
   update: function (world) {
 
-    const { InputState, Interactable, Selectable, IsSelected, IsHovered, Transform } = world.components
-    const circleVar = new Phaser.Geom.Circle();
-    const rectVar = new Phaser.Geom.Rectangle();
+    // const { InputState, Interactable, Selectable, IsSelected, IsHovered, Transform } = world.components
+    // const circleVar = new engineCircleType();
+    // const rectVar = new engineRectType();
 
-    for (const eid of bitEcs.query(world, [Interactable, Transform, Selectable])) {
+    // for (const eid of bitEcs.query(world, [Interactable, Transform, Selectable])) {
 
-    }
+    // }
   }
 }

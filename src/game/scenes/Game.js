@@ -10,8 +10,12 @@ export class Game extends Scene {
     create() {
         this.input.mouse.disableContextMenu();
         this.keyboardKeys = {
-            CTRL: this.input.keyboard.addKey("CTRL", true, false),
             SHIFT: this.input.keyboard.addKey("SHIFT", true, false),
+            CTRL: this.input.keyboard.addKey("CTRL", true, false),
+            LEFT: this.input.keyboard.addKey("LEFT", true, false),
+            UP: this.input.keyboard.addKey("UP", true, false),
+            RIGHT: this.input.keyboard.addKey("RIGHT", true, false),
+            DOWN: this.input.keyboard.addKey("DOWN", true, false),
         }
         this.actorsPool = this.add.group({
             key: '__WHITE',
@@ -28,15 +32,17 @@ export class Game extends Scene {
         this.world = createGameWorld(this);
         this.world.initSystems()
         this.playerEid = bitEcs.addEntity(this.world);
-
-        bitEcs.addComponent(this.world, this.playerEid, this.world.components.InputState)
+        const { InputState, CameraState } = this.world.components
+        bitEcs.addComponent(this.world, this.playerEid, InputState)
+        bitEcs.addComponent(this.world, this.playerEid, CameraState)
+        CameraState.gameObject[this.playerEid] = this.cameras.main;
 
         this.seedWorldWithUnits(48);
 
         this.input.on('pointerup', (pointer) => {
             if (pointer.button != 2) return;
             const { Transform, BodyOrientation, Mobile, OrderedMove, IsSelected, IsHovered } = this.world.components
-            const { x, y } = pointer
+            const { worldX: x, worldY: y } = pointer
             for (const eid of bitEcs.query(this.world, [Transform, BodyOrientation, Mobile, IsSelected])) {
                 bitEcs.addComponent(this.world, eid, OrderedMove)
                 OrderedMove.target[eid] = new Phaser.Math.Vector2(x, y)
@@ -58,79 +64,79 @@ export class Game extends Scene {
         }
     }
     createUnit() {
-        if (Math.random() > 0.5) {
-            this.createQuad()
-        } else {
-            this.createTank()
+        const unitAdded = {
+            Transform: {
+                centerPosition: this.getRandomPointOnMap(),
+            },
+            BodyOrientation: {
+                angle: Phaser.Math.Angle.Random(),
+            },
+            SpawningNow: {},
+        }
+        const unitConfig = (Math.random() > 0.5) ? tankConfig : quadConfig;
+        Object.assign(unitConfig, unitAdded)
+        Object.assign(unitConfig.RendersSprite, {
+            tint: this.unitColor.color,
+            depth: 1,
+            scale: 1,
+        })
+        this.spawnUnit(unitConfig)
+    }
+    spawnUnit(unitConfig) {
+        const world = this.world
+        const unit = bitEcs.addEntity(world);
+        for (const compKey of Object.keys(unitConfig)) {
+            const Component = this.world.components[compKey]
+            if (!Component) continue;
+            bitEcs.addComponent(world, unit, Component);
+
+            for (const propKey of Object.keys(unitConfig[compKey])) {
+                const Prop = Component[propKey];
+                if (!Prop) continue;
+
+                Prop[unit] = unitConfig[compKey][propKey]
+            }
         }
     }
-    createTank() {
-        const world = this.world
-        const { Transform, BodyOrientation, Mobile, RendersSprite, SpawningNow, Selectable, Interactable } = this.world.components
-        const unit = bitEcs.addEntity(world);
-
-        bitEcs.addComponent(world, unit, Transform);
-        Transform.centerPosition[unit] = this.getRandomPointOnMap()
-
-        bitEcs.addComponent(world, unit, BodyOrientation);
-        const angle = Phaser.Math.Angle.Random()
-        BodyOrientation.angle[unit] = angle
-
-        bitEcs.addComponent(world, unit, Mobile);
-        Mobile.turnSpeed[unit] = 1;
-        Mobile.speed[unit] = 80;
-        Mobile.turnsInPlace[unit] = true;
-
-        bitEcs.addComponent(world, unit, RendersSprite);
-        RendersSprite.spriteKey[unit] = 'tank2'
-        RendersSprite.framesFor360[unit] = 32;
-        RendersSprite.tint[unit] = this.unitColor.color
-        RendersSprite.depth[unit] = 1;
-        RendersSprite.scale[unit] = 1;
-
-        bitEcs.addComponent(world, unit, Selectable);
-        Selectable.selectionMarkerSize[unit] = 50
-
-        bitEcs.addComponent(world, unit, Interactable)
-        Interactable.hitAreaType[unit] = 'circle';
-        Interactable.hitAreaRadius[unit] = 50;
-
-        bitEcs.addComponent(world, unit, SpawningNow);
-    }
-    createQuad() {
-        const world = this.world
-        const { Transform, BodyOrientation, Mobile, RendersSprite, SpawningNow, Selectable, Interactable } = this.world.components
-        const unit = bitEcs.addEntity(world);
-
-        bitEcs.addComponent(world, unit, Transform);
-        Transform.centerPosition[unit] = this.getRandomPointOnMap()
-
-        bitEcs.addComponent(world, unit, BodyOrientation);
-        const angle = Phaser.Math.Angle.Random()
-        BodyOrientation.angle[unit] = angle
-
-        bitEcs.addComponent(world, unit, Mobile);
-        Mobile.turnSpeed[unit] = 1.25;
-        Mobile.speed[unit] = 90;
-        Mobile.turnsInPlace[unit] = false;
-
-        bitEcs.addComponent(world, unit, RendersSprite);
-        RendersSprite.spriteKey[unit] = 'quad3'
-        RendersSprite.framesFor360[unit] = 32;
-        RendersSprite.tint[unit] = this.unitColor.color
-        RendersSprite.depth[unit] = 1;
-        RendersSprite.scale[unit] = 1;
-
-        bitEcs.addComponent(world, unit, Selectable);
-        Selectable.selectionMarkerSize[unit] = 26
-
-        bitEcs.addComponent(world, unit, Interactable)
-        Interactable.hitAreaType[unit] = 'circle';
-        Interactable.hitAreaRadius[unit] = 26;
-
-        bitEcs.addComponent(world, unit, SpawningNow);
-    }
     update(_time, delta) {
+        this.input.mousePointer.updateWorldPoint(this.cameras.main)
         this.world.updateWorld(delta)
     }
+}
+
+const tankConfig = {
+    Mobile: {
+        turnSpeed: 1,
+        speed: 80,
+        turnsInPlace: true,
+    },
+    RendersSprite: {
+        spriteKey: 'tank2',
+        framesFor360: 32,
+    },
+    Selectable: {
+        selectionMarkerSize: 50,
+    },
+    Interactable: {
+        hitAreaType: 'circle',
+        hitAreaRadius: 25
+    },
+}
+const quadConfig = {
+    Mobile: {
+        turnSpeed: 1.25,
+        speed: 90,
+        turnsInPlace: false,
+    },
+    RendersSprite: {
+        spriteKey: 'quad2',
+        framesFor360: 32,
+    },
+    Selectable: {
+        selectionMarkerSize: 26,
+    },
+    Interactable: {
+        hitAreaType: 'circle',
+        hitAreaRadius: 26
+    },
 }

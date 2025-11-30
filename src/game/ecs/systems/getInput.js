@@ -6,19 +6,21 @@ export const getInputSystem = {
         const { InputState } = world.components
         const { scene } = world;
         const { playerEid, keyboardKeys } = scene;
-        const { mousePointer } = scene.input
+        const { activePointer: mousePointer } = scene.input
         const { worldX: mouseWorldX, worldY: mouseWorldY } = mousePointer
 
         const isLeftButtonDown = mousePointer.leftButtonDown()
         const isRightButtonDown = mousePointer.rightButtonDown()
-        const isCtrlDown = keyboardKeys.CTRL.isDown;
-        const isShiftDown = keyboardKeys.SHIFT.isDown;
 
         const mouseWorldPoint = { x: mouseWorldX, y: mouseWorldY }
         InputState.mousePosition[playerEid] = mouseWorldPoint
 
-        InputState.keyboardCtrlDown[playerEid] = isCtrlDown
-        InputState.keyboardShiftDown[playerEid] = isShiftDown
+        InputState.keyboardCtrlDown[playerEid] = keyboardKeys.CTRL.isDown;
+        InputState.keyboardShiftDown[playerEid] = keyboardKeys.SHIFT.isDown;
+        InputState.keyboardLeftDown[playerEid] = keyboardKeys.LEFT.isDown;
+        InputState.keyboardUpDown[playerEid] = keyboardKeys.UP.isDown;
+        InputState.keyboardRightDown[playerEid] = keyboardKeys.RIGHT.isDown;
+        InputState.keyboardDownDown[playerEid] = keyboardKeys.DOWN.isDown;
 
         const mouseLeftJustDown = (!InputState.mouseLeftDown[playerEid] && isLeftButtonDown)
         if (mouseLeftJustDown) {

@@ -1,5 +1,6 @@
 import * as bitEcs from 'bitecs';
 import { BodyOrientation } from '../components/components';
+import { engineAngleClass, PI } from '../utils';
 
 export const spawnActorSpriteSystem = {
     init: function (world) {
@@ -15,21 +16,22 @@ export const spawnActorSpriteSystem = {
 
         const { RendersSprite, Transform, SpawningNow } = world.components
         const { scene } = world;
-
+        const PI2 = 2 * PI;
         for (const eid of bitEcs.query(world, [RendersSprite, Transform, SpawningNow])) {
             const { x, y } = Transform.centerPosition[eid];
             const key = RendersSprite.spriteKey[eid];
             const tint = RendersSprite.tint[eid];
             const scale = RendersSprite.scale[eid];
             const depth = RendersSprite.depth[eid];
-            const angle = Phaser.Math.Angle.Normalize(BodyOrientation.angle[eid]);
+            const angle = engineAngleClass.Normalize(BodyOrientation.angle[eid]);
             const framesFor360 = RendersSprite.framesFor360[eid]
-            const quantizedAngle = Math.round((angle / Phaser.Math.PI2) * framesFor360)
+            const quantizedAngle = Math.round((angle / PI2) * framesFor360)
             BodyOrientation.quantizedAngle[eid] = quantizedAngle;
             const frame = quantizedAngle % framesFor360
 
             const gO =
-                scene.actorsPool.getFirstDead(true)
+                scene.actorsPool
+                    .getFirstDead(true)
                     .setTexture(key)
                     .setFrame(frame)
                     .setPosition(x, y)

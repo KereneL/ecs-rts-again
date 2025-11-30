@@ -12,6 +12,17 @@ export const InputState = {
   isDragging: [],
   keyboardCtrlDown: [],
   keyboardShiftDown: [],
+  keyboardLeftDown: [],
+  keyboardUpDown: [],
+  keyboardRightDown: [],
+  keyboardDownDown: [],
+}
+export const CameraState = {
+  center: [],
+  zoom: [],
+  position: [],
+
+  gameObject: [],
 }
 export const Interactable = {
   hitAreaType: [],
@@ -19,6 +30,10 @@ export const Interactable = {
   hitAreaWidth: [],
   hitAreaHeight: [],
 }
+export const Transform = {
+  centerPosition: [],
+  size: [],
+};
 export const BodyOrientation = {
   angle: [],
   quantizedAngle: [], //8-dir
@@ -32,18 +47,7 @@ export const RendersSprite = {
 
   gameObject: [],
 };
-export const HitShape = {
 
-}
-export const Transform = {
-  centerPosition: [],
-  size: [],
-};
-export const Health = {
-  hp: [],
-  maxHP: [],
-  isDead: [],
-}
 export const Selectable = {
   selectionMarkerSize: [],
   selectorEid: [],
@@ -51,9 +55,7 @@ export const Selectable = {
 export const Targetable = {
   targetTypes: [],//Ground, Infantry
 };
-export const AttackFrontal = {
-  facingTolerance: 0
-}
+
 export const Mobile = {
   locomotor: [],
   turnSpeed: [],
@@ -66,15 +68,28 @@ export const OrderedMove = {
 }
 export const IsMoving = {
   target: [],
-  isRotating: [],
-  isTraversing: [],
+  justStartedMovement: [],
+}
+export const IsRotating = {}
+export const IsTraversing = {}
+export const IsSelected = {}
+export const IsHovered = {}
+export const SpawningNow = {}
+
+export const Health = {
+  hp: [],
+  maxHP: [],
+  isDead: [],
+}
+export const HitShape = {
+
 }
 export const FollowEntity = {
   eid: [],
   offset: [],
   depthOffset: [],
 }
-export const IsSelected = {}
-export const IsHovered = {}
+export const AttackFrontal = {
+  facingTolerance: 0
+}
 
-export const SpawningNow = {}

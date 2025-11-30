@@ -12,12 +12,14 @@ import { getInputSystem } from "./systems/getInput";
 import { selectableSystem } from "./systems/selectable";
 import { isHoveredSystem } from "./systems/isHovered";
 import { interpretInputSystem } from "./systems/interpretInput";
+import { cameraSystem } from "./systems/camera";
 
 const systemsObjs =
   [
     spawnActorSpriteSystem,
     getInputSystem,
     interpretInputSystem,
+    cameraSystem,
     selectableSystem,
     isSelectedSystem,
     isHoveredSystem,
