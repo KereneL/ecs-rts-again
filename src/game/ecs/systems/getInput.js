@@ -1,19 +1,24 @@
 import * as bitEcs from 'bitecs';
 
 export const getInputSystem = {
-    // init: function (world) { },
+    init: function (world) { 
+        world.scene.input.activePointer.x = 100
+        world.scene.input.activePointer.y = 100
+    },
     update: function (world) {
         const { InputState } = world.components
         const { scene } = world;
         const { playerEid, keyboardKeys } = scene;
         const { activePointer: mousePointer } = scene.input
-        const { worldX: mouseWorldX, worldY: mouseWorldY } = mousePointer
+        const { worldX: mouseWorldX, worldY: mouseWorldY, x: mouseScreenX, y: mouseScreenY } = mousePointer
 
         const isLeftButtonDown = mousePointer.leftButtonDown()
         const isRightButtonDown = mousePointer.rightButtonDown()
 
         const mouseWorldPoint = { x: mouseWorldX, y: mouseWorldY }
-        InputState.mousePosition[playerEid] = mouseWorldPoint
+        const mouseScreenPoint = { x: mouseScreenX, y: mouseScreenY }
+        InputState.mouseWPosition[playerEid] = mouseWorldPoint
+        InputState.mouseSPosition[playerEid] = mouseScreenPoint
 
         InputState.keyboardCtrlDown[playerEid] = keyboardKeys.CTRL.isDown;
         InputState.keyboardShiftDown[playerEid] = keyboardKeys.SHIFT.isDown;

@@ -14,6 +14,7 @@ export const updateSpriteRotationSystem = {
       BodyOrientation.quantizedAngle[eid] = quantizedAngle;
       const gO = RendersSprite.gameObject[eid];
       const frame = quantizedAngle % framesFor360
+      
       gO.setFrame(frame)
     }
 

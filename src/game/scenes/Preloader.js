@@ -30,62 +30,17 @@ export class Preloader extends Scene {
                 url: `./selection${value}.png`,
             })
         })
-
-        this.load.spritesheet({
-            key: 'tank',
-            url: './tank.png',
-            frameConfig: {
-                frameWidth: 24,
-                frameHeight: 24,
-            }
-        })
-        this.load.spritesheet({
-            key: 'tank2',
-            url: './tank2.png',
-            frameConfig: {
-                frameWidth: 50,
-                frameHeight: 41,
-            }
-        })
-        this.load.spritesheet({
-            key: 'tank3',
-            url: './tank3.png',
-            frameConfig: {
-                frameWidth: 48,
-                frameHeight: 48,
-            }
-        })
-        this.load.spritesheet({
-            key: 'quad',
-            url: './quad.png',
-            frameConfig: {
-                frameWidth: 12,
-                frameHeight: 12,
-            }
-        })
-        this.load.spritesheet({
-            key: 'quad2',
-            url: './quad2.png',
-            frameConfig: {
-                frameWidth: 32,
-                frameHeight: 26,
-            }
-        })
-        this.load.spritesheet({
-            key: 'quad3',
-            url: './quad3.png',
-            frameConfig: {
-                frameWidth: 48,
-                frameHeight: 48,
-            }
-        })
-        this.load.spritesheet({
-            key: 'infantry',
-            url: './infantry.png',
-            frameConfig: {
-                frameWidth: 13,
-                frameHeight: 13,
-            }
+        const spriteSheets = [
+            { key: 'tank', url: './tank.png',frameConfig: {frameWidth: 24,frameHeight: 24}},
+            { key: 'tank2', url: './tank2.png',frameConfig: {frameWidth: 50,frameHeight: 41}},
+            { key: 'tank3', url: './tank3.png',frameConfig: {frameWidth: 48,frameHeight: 48}},
+            { key: 'quad', url: './quad.png',frameConfig: {frameWidth: 12,frameHeight: 12}},
+            { key: 'quad2', url: './quad2.png',frameConfig: {frameWidth: 32,frameHeight: 26}},
+            { key: 'quad3', url: './quad3.png',frameConfig: {frameWidth: 12,frameHeight: 12}},
+        ]
+        
+        spriteSheets.forEach( element => {
+            this.load.spritesheet(element)
         })
     }
 

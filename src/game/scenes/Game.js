@@ -8,6 +8,29 @@ export class Game extends Scene {
     }
 
     create() {
+        this.initInput();
+        this.initGameobjectsPool();
+        this.initGameECSWorld();
+        this.initPlayer();
+        this.seedWorldWithUnits(48);
+
+        // makeshift order move for testing
+        this.input.on('pointerup', (pointer) => {
+            if (pointer.button != 2) return;
+            const { Transform, BodyOrientation, Mobile, OrderedMove, IsSelected, IsHovered } = this.world.components
+            const { worldX: x, worldY: y } = pointer
+            for (const eid of bitEcs.query(this.world, [Transform, BodyOrientation, Mobile, IsSelected])) {
+                bitEcs.addComponent(this.world, eid, OrderedMove)
+                OrderedMove.target[eid] = new Phaser.Math.Vector2(x, y)
+                bitEcs.removeComponent(this.world, eid, IsHovered)
+            }
+        })
+    }
+    update(_time, delta) {
+        this.input.mousePointer.updateWorldPoint(this.cameras.main)
+        this.world.updateWorld(delta)
+    }
+    initInput(){
         this.input.mouse.disableContextMenu();
         this.keyboardKeys = {
             SHIFT: this.input.keyboard.addKey("SHIFT", true, false),
@@ -17,6 +40,8 @@ export class Game extends Scene {
             RIGHT: this.input.keyboard.addKey("RIGHT", true, false),
             DOWN: this.input.keyboard.addKey("DOWN", true, false),
         }
+    }
+    initGameobjectsPool(){
         this.actorsPool = this.add.group({
             key: '__WHITE',
             classType: Sprite,
@@ -28,28 +53,17 @@ export class Game extends Scene {
             .setFillStyle(0xffffff, 0.25)
             .setOrigin(0)
             .setVisible(false);
-
+    }
+    initGameECSWorld(){
         this.world = createGameWorld(this);
-        this.world.initSystems()
+        this.world.initSystems();
+    }
+    initPlayer(){
         this.playerEid = bitEcs.addEntity(this.world);
         const { InputState, CameraState } = this.world.components
         bitEcs.addComponent(this.world, this.playerEid, InputState)
         bitEcs.addComponent(this.world, this.playerEid, CameraState)
         CameraState.gameObject[this.playerEid] = this.cameras.main;
-
-        this.seedWorldWithUnits(48);
-
-        this.input.on('pointerup', (pointer) => {
-            if (pointer.button != 2) return;
-            const { Transform, BodyOrientation, Mobile, OrderedMove, IsSelected, IsHovered } = this.world.components
-            const { worldX: x, worldY: y } = pointer
-            for (const eid of bitEcs.query(this.world, [Transform, BodyOrientation, Mobile, IsSelected])) {
-                bitEcs.addComponent(this.world, eid, OrderedMove)
-                OrderedMove.target[eid] = new Phaser.Math.Vector2(x, y)
-                bitEcs.removeComponent(this.world, eid, IsHovered)
-            }
-
-        })
     }
     getRandomPointOnMap() {
         let { width, height } = this.sys.game.canvas;
@@ -97,10 +111,6 @@ export class Game extends Scene {
                 Prop[unit] = unitConfig[compKey][propKey]
             }
         }
-    }
-    update(_time, delta) {
-        this.input.mousePointer.updateWorldPoint(this.cameras.main)
-        this.world.updateWorld(delta)
     }
 }
 

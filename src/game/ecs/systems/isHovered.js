@@ -3,6 +3,8 @@ import * as bitEcs from 'bitecs';
 export const isHoveredSystem = {
     init: function (world) {
         const { IsHovered, IsSelected, Selectable, RendersSprite } = world.components
+        this.selectorPrefix = 'selection-mark-';
+
         bitEcs.observe(world, bitEcs.onRemove(IsHovered), (eid) => {
             const isSelected = bitEcs.hasComponent(world, eid, IsSelected)
             const selectorEid = Selectable.selectorEid[eid];
@@ -19,8 +21,7 @@ export const isHoveredSystem = {
         const { Transform, Selectable, IsHovered, RendersSprite, SpawningNow, FollowEntity } = world.components
         for (const eid of bitEcs.query(world, [Selectable, IsHovered])) {
             if (!Selectable.selectorEid[eid]) {
-                const key = 'selection-mark-' + Selectable.selectionMarkerSize[eid]
-                // const { x, y, depth, scale } = RendersSprite.gameObject[eid]
+                const key = this.selectorPrefix + Selectable.selectionMarkerSize[eid]
 
                 const selectorEntity = bitEcs.addEntity(world)
                 Selectable.selectorEid[eid] = selectorEntity
